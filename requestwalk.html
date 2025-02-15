@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Safe Walk Home</title>
+</head>
+<body>
+    <h2>Welcome, {{ session['email'] }}</h2>
+    <a href="{{ url_for('list_walks') }}">View Walk Requests</a><br>
+    <a href="{{ url_for('map_view') }}">Open Map</a><br>
+    <form action="{{ url_for('request_walk') }}" method="post">
+        <label>How many people?</label>
+        <input type="number" name="people_count" required><br>
+        
+        <label>Where are you right now?</label>
+        <input type="text" name="start_location" required><br>
+        
+        <label>Where are you going?</label>
+        <input type="text" name="destination" required><br>
+        
+        <label>When are you leaving?</label>
+        <input type="text" name="departure_time" required><br>
+        
+        <label>Describe what you're wearing:</label>
+        <input type="text" name="description" required><br>
+        
+        <label>Display phone number?</label>
+        <input type="checkbox" name="phone_visible"><br>
+
+        <button type="submit">Request Walk</button>
+    </form>
+
+    <a href="{{ url_for('logout') }}">Logout</a>
+</body>
+</html>

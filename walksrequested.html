@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Walk Requests</title>
+</head>
+<body>
+    <h2>Available Walk Requests</h2>
+    {% for walk in walks %}
+        <div>
+            <p>People Count: {{ walk[2] }}</p>
+            <p>From: {{ walk[3] }}</p>
+            <p>To: {{ walk[4] }}</p>
+            <p>Leaving in: {{ walk[5] }} minutes</p>
+            <form action="{{ url_for('request_walk') }}" method="post">
+                <label>Your Description:</label>
+                <input type="text" name="description" required><br>
+                <label>Show phone number?</label>
+                <input type="checkbox" name="phone_visible"><br>
+                <button type="submit">Join Walk</button>
+            </form>
+        </div>
+    {% endfor %}
+    <a href="{{ url_for('home') }}">Back to Home</a>
+</body>
+</html>
