@@ -1,6 +1,6 @@
 # SCUBuddyWalk  
 
-SCUBuddyWalk is designed to enhance public safety and foster a stronger sense of community at Santa Clara University. Our goal is to make students feel safer on campus by providing a reliable and socially connected way to navigate their surroundings.  
+We wanted to find a way to make students at Santa Clara University feel safer. We developed this project to revolutionize public safety by crowdsourcing SCU students to create a safer and more socially connected campus.
 
 ## Demo & Presentation  
 
