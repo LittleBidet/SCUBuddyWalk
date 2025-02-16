@@ -1,90 +1,177 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <style>
-        body {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
-            font-size: 20px; /* Makes text larger */
-        }
-        .logo-container {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .logo-container img {
-            width: 250px;
-            height: auto;
-        }
-        .container {
-            width: 50%;
-            padding: 20px;
-            border-radius: 10px;
-            background: #f4f4f4;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-    
-        .button-container {
-            position: fixed;
-            bottom: 20px;
-            width: 100%;
-            display: flex;
-            justify-content: space-around;
-        }
-    
-        button {
-            font-size: 18px;
-            padding: 10px 20px;
-            border: none;
-            background-color: #007bff;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-    
-        button:hover {
-            background-color: #0056b3;
-        }
-    </style>
-    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>BuddyWalk</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Roboto, sans-serif;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .header {
+            background-color: #851a27;
+            display: flex;
+            width: 100%;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 35px 10px 12px;
+            box-sizing: border-box;
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 23px;
+        }
+        .logo {
+            width: 80px;
+            height: auto;
+        }
+        .logo-text {
+            font-size: 36px;
+            font-weight: 600;
+            letter-spacing: 0.36px;
+            color: #ffffff;
+        }
+        .contact-info {
+            text-align: right;
+            color: #ffffff;
+        }
+        .contact-info div {
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.15px;
+        }
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .main-image {
+            max-width: 305px;
+            width: 100%;
+            height: auto;
+        }
+        .main-title {
+            color: #010000;
+            font-size: 36px;
+            font-weight: 700;
+            letter-spacing: 0.36px;
+            margin: 20px 0;
+        }
+        .sign-in-card {
+            background-color: #fffcfc;
+            border: 1px solid #d9d9d9;
+            border-radius: 8px;
+            padding: 10px 34px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 338px;
+        }
+        .sign-in-button {
+            background-color: #851a27;
+            color: #ffffff;
+            border: none;
+            border-radius: 100px;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .sign-in-button:hover {
+            background-color: #6d1520;
+        }
+        .navigation-bar {
+            background-color: #851a27;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 12px;
+        }
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 4px;
+        }
+        .bold-yellow {
+            color: #f4b940;
+        }
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                align-items: center;
+                padding: 10px;
+            }
+            .contact-info {
+                text-align: center;
+                margin-top: 10px;
+            }
+            .main-image {
+                max-width: 80%;
+            }
+        }
+    </style>
+</head>
 <body>
-
-    
-        <!-- Buddy Walk Logo -->
-        <div class="logo-container">
-            <img src="{{ url_for('static', filename='logo.png') }}" alt="Buddy Walk Logo">
-        </div>
-
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <div class="flash-message" id="flashMessage">
-                {% for category, message in messages %}
-                    {{ message }}
-                {% endfor %}
+    <div class="container">
+        <header class="header">
+            <div class="logo-container">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="BuddyWalk Logo" class="logo">
+                <div class="logo-text">BUDDY<span class="bold-yellow">WALK</span></div>
             </div>
-            <script>
-                document.getElementById("flashMessage").style.display = "block";
-                setTimeout(function() {
-                    document.getElementById("flashMessage").style.display = "none";
-                }, 3000); // Hide after 3 seconds
-            </script>
-        {% endif %}
-        {% endwith %}
+            <div class="contact-info">
+                <div>SCU Campus Safety</div>
+                <div>(408) 554-4444</div>
+            </div>
+        </header>
 
-        <div class="container">
-            <h2>Login</h2>
-            <form action="{{ url_for('login') }}" method="post">
-                <label>Email:</label>
-                <input type="email" name="email" required>
-                <button type="submit">Login</button>
+        <main class="main-content">
+            <img src="https://cdn.builder.io/api/v1/image/assets/38bce0552ce3493f9c2f700c1d0ef9b0/09d71fbf149c2353758c3d7c256739b014784bc75b1cc8e21fdf2d5c2dc52f0b?apiKey=38bce0552ce3493f9c2f700c1d0ef9b0&" alt="BuddyWalk Main Illustration" class="main-image">
+            <h1 class="main-title">BUDDY<span class="bold-yellow">WALK</span></h1>
+            <form action="{{ url_for('login') }}" method="post" class="sign-in-card">
+                <input type="email" name="email" required placeholder="SCU Email">
+                <button type="submit" class="sign-in-button">Sign In</button>
             </form>
-        </div>
-    </body>
-    </html>
+        </main>
+
+        <nav class="navigation-bar">
+            <a href="#" class="nav-item">
+                <img src="https://cdn.builder.io/api/v1/image/assets/38bce0552ce3493f9c2f700c1d0ef9b0/d877875e917bb09ef6b4bb8af1169fcbd23ea8da38bbaf118c0b72c5f3ff0ebc?apiKey=38bce0552ce3493f9c2f700c1d0ef9b0&" alt="SCU Map" class="nav-icon">
+                <span>SCU Map</span>
+            </a>
+            <a href="#" class="nav-item">
+                <img src="https://cdn.builder.io/api/v1/image/assets/38bce0552ce3493f9c2f700c1d0ef9b0/53a5938c7d9ad7ec442559c35a748497e9148315af33b3a0c10b670446130044?apiKey=38bce0552ce3493f9c2f700c1d0ef9b0&" alt="Host" class="nav-icon">
+                <span>Host</span>
+            </a>
+            <a href="#" class="nav-item">
+                <img src="https://cdn.builder.io/api/v1/image/assets/38bce0552ce3493f9c2f700c1d0ef9b0/7eba63b537321952b3da46e41df2cdd148565acac505e67556debed5d29eb48c?apiKey=38bce0552ce3493f9c2f700c1d0ef9b0&" alt="Join" class="nav-icon">
+                <span>Join</span>
+            </a>
+            <a href="#" class="nav-item">
+                <img src="https://cdn.builder.io/api/v1/image/assets/38bce0552ce3493f9c2f700c1d0ef9b0/630c841b0a5a4f8ddc1aeac96be54551f93b40bddbd632e7db63876543f5be59?apiKey=38bce0552ce3493f9c2f700c1d0ef9b0&" alt="Profile" class="nav-icon">
+                <span>Sign Out</span>
+            </a>
+        </nav>
+    </div>
+</body>
+</html>

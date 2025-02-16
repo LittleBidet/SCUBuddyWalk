@@ -190,3 +190,17 @@ if __name__ == '__main__':
     init_db()
     threading.Thread(target=remove_expired_walks, daemon=True).start()
     app.run(debug=True)
+
+
+def leave_walk(walk_id):
+   """
+   Allows a user to leave a walk they joined but did not request.
+   """
+   user_email = session['email']
+   with sqlite3.connect('walks.db') as conn:
+       c = conn.cursor()
+       # Remove only the participant's entry, not the entire walk
+       c.execute("DELETE FROM walk_participants WHERE walk_id = ? AND user_email = ?", (walk_id, user_email))
+       conn.commit()
+   flash("You have successfully left the walk.", "success")
+   return redirect(url_for('list_walks'))

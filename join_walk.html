@@ -75,6 +75,32 @@
         </form>
     </div>
 
+
+    <!--Temp-->
+    <script>
+        function updateTimers() {
+            fetch("{{ url_for('walks_data') }}")
+            .then(response => response.json())
+            .then(data => {
+                let currentTime = Math.floor(Date.now() / 1000);
+                data.forEach(walk => {
+                    let timeLeft = walk[3] - currentTime;
+                    let timerElement = document.getElementById("timer_" + walk[0]);
+                    if (timeLeft <= 0) {
+                        timerElement.innerHTML = "Expired!";
+                    } else {
+                        let minutes = Math.floor(timeLeft / 60);
+                        let seconds = timeLeft % 60;
+                        timerElement.innerHTML = minutes + "m " + seconds + "s left";
+                    }
+                });
+            });
+        }
+
+        setInterval(updateTimers, 1000);
+        updateTimers();
+    </script>
+
     <!-- Navigation Buttons -->
     <div class="button-container">
         <a href="{{ url_for('home') }}"><button>Home</button></a>
