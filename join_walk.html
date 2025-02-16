@@ -3,110 +3,161 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Join Walk</title>
+    <title>BuddyWalk</title>
     <style>
-        body {
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100vh;
+            font-family: Roboto, sans-serif;
+        }
+        .container {
+            
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            
+
+        }
+        .content-box {
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+            background: #f4f4f4;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin: 20px auto;
+        }
+        .header {
+            background-color: #851a27;
+            display: flex;
+            width: 100%;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 35px 10px 12px;
+            box-sizing: border-box;
+        }
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 23px;
+        }
+        .logo {
+            width: 80px;
+            height: auto;
+        }
+        .logo-text {
+            font-size: 36px;
+            font-weight: 600;
+            letter-spacing: 0.36px;
+            color: #ffffff;
+        }
+        .contact-info {
+            text-align: right;
+            color: #ffffff;
+        }
+        .contact-info div {
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.15px;
+        }
+        .main-content {
+            flex-grow: 1;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            text-align: center;
-            font-size: 20px;
-        }
-
-        .logo-container {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .logo-container img {
-            width: 150px;
-            height: auto;
-        }
-
-        .container {
-            width: 50%;
             padding: 20px;
-            border-radius: 10px;
-            background: #f4f4f4;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-
-        .button-container {
-            position: fixed;
-            bottom: 20px;
+        .bob {
             width: 100%;
+            max-width: 500px;
+            padding: 20px;
+            background: #f4f4f4;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin: 0 auto;
+        }
+        .navigation-bar {
+            background-color: #851a27;
             display: flex;
             justify-content: space-around;
+            padding: 10px 0;
+            margin-top: auto;
         }
-
-        button {
-            font-size: 18px;
-            padding: 10px 20px;
-            border: none;
-            background-color: #007bff;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 12px;
         }
-
-        button:hover {
-            background-color: #0056b3;
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 4px;
+        }
+        .bold-yellow {
+            color: #f4b940;
+        }
+        .main-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0 auto;
         }
     </style>
 </head>
 <body>
-
-    <!-- Buddy Walk Logo -->
-    <div class="logo-container">
-        <img src="{{ url_for('static', filename='logo.png') }}" alt="Buddy Walk Logo">
-    </div>
-
     <div class="container">
-        <h2>Join Walk</h2>
-        <form method="POST">
-            <label for="description"><strong>Describe what you are wearing:</strong></label><br>
-            <input type="text" name="description" required><br><br>
+        <header class="header">
+            <div class="logo-container">
+                <img src="https://cdn.builder.io/api/v1/image/assets/38bce0552ce3493f9c2f700c1d0ef9b0/352870bf8121258c78f0f57e45974c551c077410fbd4fd60b0c3cdc475715174?apiKey=38bce0552ce3493f9c2f700c1d0ef9b0&" alt="BuddyWalk Logo" class="logo">
+                <div class="logo-text">BUDDY<span class="bold-yellow">WALK</span></div>
+            </div>
+            <div class="contact-info">
+                <div>SCU Campus Safety</div>
+                <div>(408) 554-4444</div>
+            </div>
+        </header>
+        <div class="main-wrapper">
+            <div class="bob">
+                <h2>Join Walk</h2>
+                <form method="POST">
+                    <label for="description"><strong>Describe your clothing:</strong></label><br>
+                    <input type="text" name="description" required><br><br>
 
-            <label for="phone_number"><strong>Optional: Share Phone Number</strong></label><br>
-            <input type="text" name="phone_number"><br><br>
+                    <label for="phone_number"><strong>Optional: Share Phone Number</strong></label><br>
+                    <input type="text" name="phone_number"><br><br>
 
-            <button type="submit">Join Walk</button>
-        </form>
+                    <button type="submit">Join Walk</button>
+                </form>
+            </div>
+        </div>
+        <nav class="navigation-bar">
+            <a href="/map" class="nav-item">
+                <img src="https://cdn.builder.io/api/v1/image/assets/38bce0552ce3493f9c2f700c1d0ef9b0/d877875e917bb09ef6b4bb8af1169fcbd23ea8da38bbaf118c0b72c5f3ff0ebc?apiKey=38bce0552ce3493f9c2f700c1d0ef9b0&" alt="SCU Map" class="nav-icon">
+                <span>SCU Map</span>
+            </a>
+            <a href="/home" class="nav-item">
+                <img src="https://cdn.builder.io/api/v1/image/assets/38bce0552ce3493f9c2f700c1d0ef9b0/53a5938c7d9ad7ec442559c35a748497e9148315af33b3a0c10b670446130044?apiKey=38bce0552ce3493f9c2f700c1d0ef9b0&" alt="Host" class="nav-icon">
+                <span>Host</span>
+            </a>
+            <a href="/walks" class="nav-item">
+                <img src="https://cdn.builder.io/api/v1/image/assets/38bce0552ce3493f9c2f700c1d0ef9b0/7eba63b537321952b3da46e41df2cdd148565acac505e67556debed5d29eb48c?apiKey=38bce0552ce3493f9c2f700c1d0ef9b0&" alt="Join" class="nav-icon">
+                <span>Join</span>
+            </a>
+            <a href="/signout" class="nav-item">
+                <img src="https://cdn.builder.io/api/v1/image/assets/38bce0552ce3493f9c2f700c1d0ef9b0/630c841b0a5a4f8ddc1aeac96be54551f93b40bddbd632e7db63876543f5be59?apiKey=38bce0552ce3493f9c2f700c1d0ef9b0&" alt="Sign Out" class="nav-icon">
+                <span>Sign Out</span>
+            </a>
+        </nav>
     </div>
-
-
-    <!--Temp-->
-    <script>
-        function updateTimers() {
-            fetch("{{ url_for('walks_data') }}")
-            .then(response => response.json())
-            .then(data => {
-                let currentTime = Math.floor(Date.now() / 1000);
-                data.forEach(walk => {
-                    let timeLeft = walk[3] - currentTime;
-                    let timerElement = document.getElementById("timer_" + walk[0]);
-                    if (timeLeft <= 0) {
-                        timerElement.innerHTML = "Expired!";
-                    } else {
-                        let minutes = Math.floor(timeLeft / 60);
-                        let seconds = timeLeft % 60;
-                        timerElement.innerHTML = minutes + "m " + seconds + "s left";
-                    }
-                });
-            });
-        }
-
-        setInterval(updateTimers, 1000);
-        updateTimers();
-    </script>
-
-    <!-- Navigation Buttons -->
-    <div class="button-container">
-        <a href="{{ url_for('home') }}"><button>Home</button></a>
-        <a href="{{ url_for('map_view') }}"><button>Map</button></a>
-        <a href="{{ url_for('signout') }}"><button style="background-color: red;">Sign Out</button></a>
-    </div>
-
 </body>
 </html>

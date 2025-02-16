@@ -3,17 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Walk Details</title>
+    <title>BuddyWalk</title>
     <style>
-        body {
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Roboto, sans-serif;
+        }
+        .container {
+            flex: 1;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            font-size: 20px;
+            min-height: 100vh;
         }
-
+        .content-box {
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+            background: #f4f4f4;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            margin: 20px auto;
+        }
         .header {
             background-color: #851a27;
             display: flex;
@@ -34,35 +47,26 @@
         }
         .logo-text {
             font-size: 36px;
-            font-weight: 700;
+            font-weight: 600;
             letter-spacing: 0.36px;
             color: #ffffff;
         }
-
-        .container {
-            width: 50%;
-            padding: 20px;
-            border-radius: 10px;
-            background: #f4f4f4;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        .contact-info {
+            text-align: right;
+            color: #ffffff;
         }
-
-        .button-container {
-            position: fixed;
-            bottom: 20px;
-            width: 100%;
+        .contact-info div {
+            font-size: 15px;
+            font-weight: 700;
+            letter-spacing: 0.15px;
+        }
+        .main-content {
+            flex-grow: 1;
             display: flex;
-            justify-content: space-around;
-        }
-
-        button {
-            font-size: 18px;
-            padding: 10px 20px;
-            border: none;
-            background-color: #007bff;
-            color: white;
-            border-radius: 5px;
-            cursor: pointer;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
         .navigation-bar {
             background-color: #851a27;
@@ -79,83 +83,103 @@
             text-decoration: none;
             font-size: 12px;
         }
-        .nav-item img {
+        .nav-icon {
             width: 24px;
             height: 24px;
             margin-bottom: 4px;
         }
-        
+        .bold-yellow {
+            color: #f4b940;
+        }
     </style>
 </head>
 <body>
-
-    
-    <header class="header">
-        <div class="logo-container">
-            <img src="{{ url_for('static', filename='logo.png') }}" alt="BuddyWalk Logo" class="logo">
-            <div class="logo-text">BUDDY<span class="bold-yellow">WALK</span></div>
-        </div>
-        <div class="contact-info">
-            <div>SCU Campus Safety</div>
-            <div>(408) 554-4444</div>
-        </div>
-    </header>
-
     <div class="container">
-        <h2>Walk Details</h2>
-        <p><strong>From:</strong> {{ walk[3] }}</p>
-        <p><strong>To:</strong> {{ walk[4] }}</p>
-        <p><strong>Leaving in:</strong> <span id="timer_{{ walk[0] }}">Loading...</span></p>
-        <p><strong>Description:</strong> {{ walk[6] }}</p>
-        <p><strong>Contact:</strong> {{ walk[7] if walk[7] else 'Not Shared' }}</p>
-
-        <h3>Participants:</h3>
-        <ul>
-            {% for participant in participants %}
-                <li>{{ participant[0] }} - {{ participant[1] }} ({{ participant[2] if participant[2] else 'No Number Shared' }})</li>
-            {% endfor %}
-        </ul>
+        <header class="header">
+            <div class="logo-container">
+                <img src="{{ url_for('static', filename='logo.png') }}" alt="BuddyWalk Logo" class="logo">
+                <div class="logo-text">BUDDY<span class="bold-yellow">WALK</span></div>
+            </div>
+            <div class="contact-info">
+                <div>SCU Campus Safety</div>
+                <div>(408) 554-4444</div>
+            </div>
+        </header>
+        <div class="content-box">
+            <div class="main-content">
+                <h2>Walk Details</h2>
+                <p><strong>From:</strong> {{ walk[3] }}</p>
+                <p><strong>To:</strong> {{ walk[4] }}</p>
+                <p><strong>Leaving in:</strong> <span id="timer_{{ walk[0] }}">Loading...</span></p>
+                <p><strong>Description:</strong> {{ walk[6] }}</p>
+                <p><strong>Contact:</strong> {{ walk[7] if walk[7] else 'Not Shared' }}</p>
+                <h3>Participants:</h3>
+                <ul>
+                    {% for participant in participants %}
+                        <li>{{ participant[0] }} - {{ participant[1] }} ({{ participant[2] if participant[2] else 'No Number Shared' }})</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <script>
+            function updateTimers() {
+                fetch("{{ url_for('walks_data') }}")
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Fetched Data:", data); // Debugging output
+                    let currentTime = Math.floor(Date.now() / 1000);
+                    data.forEach(walk => {
+                        let walkId = "timer_" + walk[0];
+                        let timerElement = document.getElementById(walkId);
+        
+                        if (!timerElement) {
+                            console.warn("No timer element found for walk ID:", walk[0]);
+                            return;
+                        }
+        
+                        let timeLeft = walk[3] - currentTime;
+                        if (isNaN(timeLeft)) {
+                            console.error("Invalid timeLeft value for walk ID:", walk[0], walk[3]);
+                            timerElement.innerHTML = "Error!";
+                            return;
+                        }
+        
+                        if (timeLeft <= 0) {
+                            timerElement.innerHTML = "Expired!";
+                        } else {
+                            let minutes = Math.floor(timeLeft / 60);
+                            let seconds = timeLeft % 60;
+                            timerElement.innerHTML = minutes + "m " + seconds + "s left";
+                        }
+                    });
+                })
+                .catch(error => console.error("Error fetching walk data:", error));
+            }
+        
+            window.onload = function() {
+                updateTimers();
+                setInterval(updateTimers, 1000);
+            };
+        </script>
+        
+        <nav class="navigation-bar">
+            <a href="/map" class="nav-item">
+                <img src="https://cdn.builder.io/api/v1/image/assets/38bce0552ce3493f9c2f700c1d0ef9b0/d877875e917bb09ef6b4bb8af1169fcbd23ea8da38bbaf118c0b72c5f3ff0ebc?apiKey=38bce0552ce3493f9c2f700c1d0ef9b0&" alt="SCU Map" class="nav-icon">
+                <span>SCU Map</span>
+            </a>
+            <a href="/home" class="nav-item">
+                <img src="https://cdn.builder.io/api/v1/image/assets/38bce0552ce3493f9c2f700c1d0ef9b0/53a5938c7d9ad7ec442559c35a748497e9148315af33b3a0c10b670446130044?apiKey=38bce0552ce3493f9c2f700c1d0ef9b0&" alt="Host" class="nav-icon">
+                <span>Host</span>
+            </a>
+            <a href="/walks" class="nav-item">
+                <img src="https://cdn.builder.io/api/v1/image/assets/38bce0552ce3493f9c2f700c1d0ef9b0/7eba63b537321952b3da46e41df2cdd148565acac505e67556debed5d29eb48c?apiKey=38bce0552ce3493f9c2f700c1d0ef9b0&" alt="Join" class="nav-icon">
+                <span>Join</span>
+            </a>
+            <a href="/signout" class="nav-item">
+                <img src="https://cdn.builder.io/api/v1/image/assets/38bce0552ce3493f9c2f700c1d0ef9b0/630c841b0a5a4f8ddc1aeac96be54551f93b40bddbd632e7db63876543f5be59?apiKey=38bce0552ce3493f9c2f700c1d0ef9b0&" alt="Sign Out" class="nav-icon">
+                <span>Sign Out</span>
+            </a>
+        </nav>
     </div>
-
-    <script>
-        function updateTimers() {
-            fetch("{{ url_for('walks_data') }}")
-            .then(response => response.json())
-            .then(data => {
-                let currentTime = Math.floor(Date.now() / 1000);
-                data.forEach(walk => {
-                    let timeLeft = walk[3] - currentTime;
-                    let timerElement = document.getElementById("timer_" + walk[0]);
-                    if (timeLeft <= 0) {
-                        timerElement.innerHTML = "Expired!";
-                    } else {
-                        let minutes = Math.floor(timeLeft / 60);
-                        let seconds = timeLeft % 60;
-                        timerElement.innerHTML = minutes + "m " + seconds + "s left";
-                    }
-                });
-            });
-        }
-
-        setInterval(updateTimers, 1000);
-        updateTimers();
-    </script>
-
-    <!-- Navigation Buttons -->
-    <nav class="navigation-bar">
-        <a href="map" class="nav-item">
-            <img src="https://cdn.builder.io/api/v1/image/assets/38bce0552ce3493f9c2f700c1d0ef9b0/d877875e917bb09ef6b4bb8af1169fcbd23ea8da38bbaf118c0b72c5f3ff0ebc?apiKey=38bce0552ce3493f9c2f700c1d0ef9b0&" alt="SCU Map" class="nav-icon">
-            <span>SCU Map</span>
-        </a>
-        <a href="#" class="nav-item">
-            <img src="https://cdn.builder.io/api/v1/image/assets/38bce0552ce3493f9c2f700c1d0ef9b0/53a5938c7d9ad7ec442559c35a748497e9148315af33b3a0c10b670446130044?apiKey=38bce0552ce3493f9c2f700c1d0ef9b0&" alt="Host" class="nav-icon">
-            <span>Host</span>
-        </a>
-        <a href="walks" class="nav-item">
-            <img src="https://cdn.builder.io/api/v1/image/assets/38bce0552ce3493f9c2f700c1d0ef9b0/7eba63b537321952b3da46e41df2cdd148565acac505e67556debed5d29eb48c?apiKey=38bce0552ce3493f9c2f700c1d0ef9b0&" alt="Join" class="nav-icon">
-            <span>Join</span>
-        </a>
-    </nav>
-
 </body>
 </html>
