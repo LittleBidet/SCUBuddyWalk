@@ -3,25 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Walk Requests</title>
+    <title>Available Walk Requests</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 20px;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .logo-container img {
+            width: 150px;
+            height: auto;
+        }
+
+        .container {
+            width: 50%;
+            padding: 20px;
+            border-radius: 10px;
+            background: #f4f4f4;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .button-container {
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        button {
+            font-size: 18px;
+            padding: 10px 20px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <h2>Available Walk Requests</h2>
-    {% for walk in walks %}
-        <div>
-            <p>People Count: {{ walk[2] }}</p>
-            <p>From: {{ walk[3] }}</p>
-            <p>To: {{ walk[4] }}</p>
-            <p>Leaving in: {{ walk[5] }} minutes</p>
-            <form action="{{ url_for('request_walk') }}" method="post">
-                <label>Your Description:</label>
-                <input type="text" name="description" required><br>
-                <label>Show phone number?</label>
-                <input type="checkbox" name="phone_visible"><br>
-                <button type="submit">Join Walk</button>
-            </form>
+
+    <!-- Buddy Walk Logo -->
+    <div class="logo-container">
+        <img src="{{ url_for('static', filename='logo.png') }}" alt="Buddy Walk Logo">
+    </div>
+
+    <div class="container">
+        <h2>Available Walk Requests</h2>
+        {% for walk in walks %}
+        <div style="border: 1px solid #ddd; padding: 10px; margin-bottom: 10px;">
+            <p><strong>From:</strong> {{ walk[3] }}</p>
+            <p><strong>To:</strong> {{ walk[4] }}</p>
+            <p><strong>Leaving in:</strong> <span id="timer_{{ walk[0] }}">Loading...</span></p>
+
+            <a href="{{ url_for('walk_details', walk_id=walk[0]) }}">
+                <button>View Details</button>
+            </a>
+
+            <a href="{{ url_for('join_walk', walk_id=walk[0]) }}">
+                <button>Join Walk</button>
+            </a>
         </div>
-    {% endfor %}
-    <a href="{{ url_for('home') }}">Back to Home</a>
+        {% endfor %}
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="button-container">
+        <a href="{{ url_for('home') }}"><button>Home</button></a>
+        <a href="{{ url_for('map_view') }}"><button>Map</button></a>
+        <a href="{{ url_for('signout') }}"><button style="background-color: red;">Sign Out</button></a>
+    </div>
+
+    <script>
+        function updateTimers() {
+            fetch("{{ url_for('walks_data') }}")
+            .then(response => response.json())
+            .then(data => {
+                let currentTime = Math.floor(Date.now() / 1000);
+                data.forEach(walk => {
+                    let timeLeft = walk[3] - currentTime;
+                    let timerElement = document.getElementById("timer_" + walk[0]);
+                    if (timeLeft <= 0) {
+                        timerElement.innerHTML = "Expired!";
+                    } else {
+                        let minutes = Math.floor(timeLeft / 60);
+                        let seconds = timeLeft % 60;
+                        timerElement.innerHTML = minutes + "m " + seconds + "s left";
+                    }
+                });
+            });
+        }
+
+        setInterval(updateTimers, 1000);
+        updateTimers();
+    </script>
+
 </body>
 </html>
